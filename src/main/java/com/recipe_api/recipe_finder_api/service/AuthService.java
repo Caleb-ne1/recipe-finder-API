@@ -49,5 +49,13 @@ public class AuthService {
         return userRepository.save(user);
 
     }
+
+    // validate users
+    public User validateUser(String email, String password) {
+    
+        return userRepository.findByEmail(email)
+                .filter(user -> passwordEncoder.matches(password, user.getPassword())) 
+                .orElse(null);
+    }
     
 }
