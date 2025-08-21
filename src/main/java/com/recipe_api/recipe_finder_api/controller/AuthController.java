@@ -1,5 +1,6 @@
 package com.recipe_api.recipe_finder_api.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,10 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.recipe_api.recipe_finder_api.dto.Login;
 import com.recipe_api.recipe_finder_api.model.User;
+import com.recipe_api.recipe_finder_api.repository.UserRepository;
 import com.recipe_api.recipe_finder_api.service.AuthService;
 import com.recipe_api.recipe_finder_api.util.ApiResponse;
 
@@ -22,6 +23,9 @@ public class AuthController {
     
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public AuthController(AuthService authService) {
         this.authService = authService;
