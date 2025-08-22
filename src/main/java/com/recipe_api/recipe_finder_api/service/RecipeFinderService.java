@@ -39,5 +39,11 @@ public class RecipeFinderService {
         return restTemplate.getForObject(API_URL, JsonNode.class);
     }
 
+    // Lookup full meal details by id
+    public JsonNode getMealDetailsById(String mealId) {
+        String API_URL = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + mealId;
+        return restTemplate.getForObject(API_URL, JsonNode.class);
+    }
+
     
 }

@@ -48,5 +48,12 @@ public class RecipeFinderController {
         return ResponseEntity.ok(response);
     }
 
+    // Lookup full meal details by id
+    @GetMapping("/lookup")
+    public ResponseEntity<JsonNode> getMealDetailsById(@RequestParam String id) {
+        JsonNode response = recipeFinderService.getMealDetailsById(id);
+        return ResponseEntity.ok(response);
+    }
+
     
 }
