@@ -33,5 +33,11 @@ public class RecipeFinderService {
         return restTemplate.getForObject(API_URL, JsonNode.class);
     }
 
+    // Filter by main ingredient
+    public JsonNode getByIngredient(String ingredient) {
+        String API_URL = "https://www.themealdb.com/api/json/v1/1/filter.php?i=" + ingredient;
+        return restTemplate.getForObject(API_URL, JsonNode.class);
+    }
+
     
 }

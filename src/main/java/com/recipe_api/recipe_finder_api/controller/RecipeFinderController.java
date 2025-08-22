@@ -41,5 +41,12 @@ public class RecipeFinderController {
         return ResponseEntity.ok(response);
     }
 
+    // Filter by main ingredient
+    @GetMapping("/filter")
+    public ResponseEntity<JsonNode> getByIngredient(@RequestParam String ingredient) {
+        JsonNode response = recipeFinderService.getByIngredient(ingredient);
+        return ResponseEntity.ok(response);
+    }
+
     
 }
