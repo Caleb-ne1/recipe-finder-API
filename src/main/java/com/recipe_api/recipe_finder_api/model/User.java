@@ -3,6 +3,8 @@ package com.recipe_api.recipe_finder_api.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "users") 
@@ -23,6 +25,10 @@ public class User {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    // Relationship with favorites
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
 
     // Constructors
     public User() {}

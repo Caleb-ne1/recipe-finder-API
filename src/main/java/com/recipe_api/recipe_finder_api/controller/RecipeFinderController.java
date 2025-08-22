@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.recipe_api.recipe_finder_api.model.FavoriteRecipe;
 import com.recipe_api.recipe_finder_api.service.RecipeFinderService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -52,6 +54,14 @@ public class RecipeFinderController {
     @GetMapping("/lookup")
     public ResponseEntity<JsonNode> getMealDetailsById(@RequestParam String id) {
         JsonNode response = recipeFinderService.getMealDetailsById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    // Add to favorites
+    @PostMapping("/favorites")
+    public ResponseEntity<?> addToFavorites(@RequestParam Long userId, @RequestParam String mealId) {
+        FavoriteRecipe response = recipeFinderService.addToFavorites(userId, mealId);
+
         return ResponseEntity.ok(response);
     }
 

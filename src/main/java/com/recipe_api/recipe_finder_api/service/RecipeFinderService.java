@@ -4,14 +4,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.recipe_api.recipe_finder_api.Exceptions.AlreadyFoundException;
+import com.recipe_api.recipe_finder_api.Exceptions.NotFoundException;
+import com.recipe_api.recipe_finder_api.Exceptions.RequiredException;
+import com.recipe_api.recipe_finder_api.model.FavoriteRecipe;
+import com.recipe_api.recipe_finder_api.model.User;
+import com.recipe_api.recipe_finder_api.repository.FavoriteRecipeRepository;
+import com.recipe_api.recipe_finder_api.repository.UserRepository;
 
 @Service
 public class RecipeFinderService {
 
     private final RestTemplate restTemplate;
+    private FavoriteRecipeRepository favoriteRecipeRepository;
+    private UserRepository userRepository;
 
-    public RecipeFinderService(RestTemplate restTemplate) {
+    public RecipeFinderService(RestTemplate restTemplate, FavoriteRecipeRepository favoriteRecipeRepository, UserRepository userRepository) {
         this.restTemplate = restTemplate;
+        this.favoriteRecipeRepository = favoriteRecipeRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -44,6 +55,28 @@ public class RecipeFinderService {
         String API_URL = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + mealId;
         return restTemplate.getForObject(API_URL, JsonNode.class);
     }
+
+    // add meals to favorites by user id & meal id
+    public FavoriteRecipe addToFavorites(Long userId, String mealId) {
+        // check fields
+        if(mealId == null || mealId.isEmpty() ) {
+            throw new RequiredException("MealId required");
+        }
+
+        User user = userRepository.findByUserID(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        // Prevent duplicates
+        if (favoriteRecipeRepository.existsByUserUserIDAndMealId(userId, mealId)) {
+            throw new AlreadyFoundException("Recipe already in favorites");
+        }
+
+        FavoriteRecipe favoriteRecipe = new FavoriteRecipe();
+        favoriteRecipe.setMealId(mealId);
+        favoriteRecipe.setUser(user);
+        return favoriteRecipeRepository.save(favoriteRecipe);
+    }
+
 
     
 }

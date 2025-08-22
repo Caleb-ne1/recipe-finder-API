@@ -31,4 +31,16 @@ public class GlobalHandler {
 
         return new ResponseEntity<ErrorResponse>(required, HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(value = {NotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException nf) {
+
+        ErrorResponse notFound = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            nf.getMessage()
+        );
+
+        return new ResponseEntity<ErrorResponse>(notFound, HttpStatus.NOT_FOUND);
+    }
 }
