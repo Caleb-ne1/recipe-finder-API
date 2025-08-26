@@ -1,5 +1,7 @@
 package com.recipe_api.recipe_finder_api.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.recipe_api.recipe_finder_api.model.FavoriteRecipe;
 import com.recipe_api.recipe_finder_api.service.RecipeFinderService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,14 +60,5 @@ public class RecipeFinderController {
         JsonNode response = recipeFinderService.getMealDetailsById(id);
         return ResponseEntity.ok(response);
     }
-
-    // Add to favorites
-    @PostMapping("/favorites")
-    public ResponseEntity<?> addToFavorites(@RequestParam Long userId, @RequestParam String mealId) {
-        FavoriteRecipe response = recipeFinderService.addToFavorites(userId, mealId);
-
-        return ResponseEntity.ok(response);
-    }
-
     
 }

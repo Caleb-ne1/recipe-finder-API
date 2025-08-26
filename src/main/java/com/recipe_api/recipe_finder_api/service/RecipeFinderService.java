@@ -55,28 +55,5 @@ public class RecipeFinderService {
         String API_URL = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + mealId;
         return restTemplate.getForObject(API_URL, JsonNode.class);
     }
-
-    // add meals to favorites by user id & meal id
-    public FavoriteRecipe addToFavorites(Long userId, String mealId) {
-        // check fields
-        if(mealId == null || mealId.isEmpty() ) {
-            throw new RequiredException("MealId required");
-        }
-
-        User user = userRepository.findByUserID(userId)
-                .orElseThrow(() -> new NotFoundException("User not found"));
-
-        // Prevent duplicates
-        if (favoriteRecipeRepository.existsByUserUserIDAndMealId(userId, mealId)) {
-            throw new AlreadyFoundException("Recipe already in favorites");
-        }
-
-        FavoriteRecipe favoriteRecipe = new FavoriteRecipe();
-        favoriteRecipe.setMealId(mealId);
-        favoriteRecipe.setUser(user);
-        return favoriteRecipeRepository.save(favoriteRecipe);
-    }
-
-
-    
+ 
 }

@@ -1,5 +1,7 @@
 package com.recipe_api.recipe_finder_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +16,7 @@ public class FavoriteRecipe {
     // Relationship with user
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     public FavoriteRecipe() {}
