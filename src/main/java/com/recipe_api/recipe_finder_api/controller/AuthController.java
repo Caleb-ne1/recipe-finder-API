@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,9 +49,33 @@ public class AuthController {
 
         User user = authService.validateUser(loginRequest.getEmail(), loginRequest.getPassword());
         if (user != null) {
-            session.setAttribute("email", user.getEmail());
+            session.setAttribute("user_id", user.getUserID());
             return ResponseEntity.ok("Login successful. Session ID: " + session.getId());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    }
+
+    @GetMapping("/get-session")
+    public String getSession(HttpSession session) {
+        // Retrieve the user_id stored in session
+        Long userId = (Long) session.getAttribute("user_id");
+        if (userId != null) {
+            return "User ID in session: " + userId;
+        } else {
+            return "No user in session";
+        }
+    }
+
+    @GetMapping("/user/me")
+    public ResponseEntity<String> getCurrentUser(HttpSession session) {
+        // Retrieve the user_id stored in session
+        Long userId = (Long) session.getAttribute("user_id");
+
+        if (userId != null) {
+            return ResponseEntity.ok("Logged in user ID: " + userId);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("No user logged in");
+        }
     }
 }

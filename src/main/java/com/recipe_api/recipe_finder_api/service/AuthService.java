@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.recipe_api.recipe_finder_api.Exceptions.AlreadyFoundException;
+import com.recipe_api.recipe_finder_api.Exceptions.NotFoundException;
 import com.recipe_api.recipe_finder_api.Exceptions.RequiredException;
 import com.recipe_api.recipe_finder_api.model.User;
 import com.recipe_api.recipe_finder_api.repository.UserRepository;
@@ -56,6 +57,12 @@ public class AuthService {
         return userRepository.findByEmail(email)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword())) 
                 .orElse(null);
+    }
+
+    // get user by id
+    public User getUserById(Long userId) {
+        return userRepository.findByUserID(userId)
+                .orElseThrow(() -> new NotFoundException("User not found with ID: " + userId));
     }
     
 }
